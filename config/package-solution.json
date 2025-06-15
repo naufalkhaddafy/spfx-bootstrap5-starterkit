@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "e-sign-project-node-20-client-side-solution",
+    "id": "155ba180-9bd9-4377-9fc3-00cd7e41c480",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.21.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "e-sign-project-node-20 description"
+      },
+      "longDescription": {
+        "default": "e-sign-project-node-20 description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "e-sign-project-node-20 Feature",
+        "description": "The feature that activates elements of the e-sign-project-node-20 solution.",
+        "id": "fc57b932-3bdf-4c0d-b0e9-7bde7117ebd0",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/e-sign-project-node-20.sppkg"
+  }
+}

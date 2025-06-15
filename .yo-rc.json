@@ -1,0 +1,18 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "nodeVersion": "22.16.0",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "e-sign-project-node-20",
+    "libraryId": "155ba180-9bd9-4377-9fc3-00cd7e41c480",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "e-sign-project-node-20",
+    "solutionShortDescription": "e-sign-project-node-20 description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
