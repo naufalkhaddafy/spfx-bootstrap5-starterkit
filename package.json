@@ -19,10 +19,13 @@
     "@microsoft/sp-office-ui-fabric-core": "1.21.1",
     "@microsoft/sp-property-pane": "1.21.1",
     "@microsoft/sp-webpart-base": "1.21.1",
+    "@pnp/graph": "^4.14.0",
+    "@pnp/sp": "^4.14.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.6",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "signature_pad": "^5.0.9",
     "tslib": "2.3.1"
   },
   "devDependencies": {
