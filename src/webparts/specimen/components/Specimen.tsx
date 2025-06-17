@@ -29,7 +29,7 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
           </p>
 
           <div className="row mt-3">
-            <div className="col">
+            <div className="col-12 col-lg-6">
               <h5>Initial Specimen</h5>
               {initialLoading || !initialUrl ? (
                 <div className="img-fluid rounded border h-100 d-flex align-items-center justify-content-center">
@@ -44,7 +44,7 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 />
               )}
             </div>
-            <div className="col">
+            <div className="col-12 col-lg-6">
               <h5>Signature Specimen</h5>
               {signatureLoading ? (
                 <p>Loading or signature not found.</p>
