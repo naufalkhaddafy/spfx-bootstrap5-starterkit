@@ -7,7 +7,7 @@ import type { ISpecimenProps } from "./ISpecimenProps";
 import { escape } from "@microsoft/sp-lodash-subset";
 import { useSpecimens } from "../hooks/useSpecimens";
 import SignatureComponent from "./SignatureComponent";
-import { useSignaturePad } from "../hooks/useSignaturePad";
+// import { useSignaturePad } from "../hooks/useSignaturePad";
 
 const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
   const { items: initialUrl, loading: initialLoading } = useSpecimens(
@@ -23,14 +23,14 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
   const [editInitial, setEditInitial] = useState<boolean>(false);
   const [editSignature, setEditSignature] = useState<boolean>(false);
 
-  const canvasSignature = React.useRef<HTMLCanvasElement>(null);
-  // const canvasInitial = React.useRef<HTMLCanvasElement>(null);
-  const {
-    canvasRef: canvasInitial,
-    isEmpty,
-    clear: clearInitial,
-    getDataURL,
-  } = useSignaturePad();
+  // const canvasSignature = React.useRef<HTMLCanvasElement>(null);
+  // // const canvasInitial = React.useRef<HTMLCanvasElement>(null);
+  // const {
+  //   canvasRef: canvasInitial,
+  //   isEmpty,
+  //   clear: clearInitial,
+  //   getDataURL,
+  // } = useSignaturePad();
   return (
     <section className="container mt-4">
       <div className="">
@@ -42,17 +42,12 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
         <div className="row my-5">
           <div className="col-12 col-lg-6">
             <h5>Initial Specimen</h5>
-            <SignatureComponent canvasRef={canvasInitial} isEmpty={isEmpty} />
-            <button onClick={clearInitial}>Clear</button>
-            <button onClick={() => console.log(getDataURL())}>Save</button>
+            {/* <SignatureComponent canvasRef={canvasInitial} isEmpty={isEmpty} /> */}
+            {/* <button onClick={clearInitial}>Clear</button>
+            <button onClick={() => console.log(getDataURL())}>Save</button> */}
             {editInitial ? (
               <div id="initialPad" className="my-3">
-                <SignatureComponent
-                  canvasRef={canvasInitial}
-                  isEmpty={isEmpty}
-                />
-                <button onClick={clearInitial}>Clear</button>
-                <button onClick={() => console.log(getDataURL())}>Save</button>
+                <SignatureComponent />
               </div>
             ) : (
               <div id="initialSpecimen" className="my-3">
@@ -92,10 +87,7 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
             <h5>Signature Specimen</h5>
             {editSignature ? (
               <div id="initialPad" className="my-3">
-                <SignatureComponent
-                  canvasRef={canvasSignature}
-                  isEmpty={true}
-                />
+                <SignatureComponent />
               </div>
             ) : (
               <div id="signatureSpecimen" className="my-3">

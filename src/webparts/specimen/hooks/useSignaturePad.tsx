@@ -9,12 +9,24 @@ export const useSignaturePad = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    signaturePadRef.current = new SignaturePad(canvasRef.current, {
+
+    const pad = new SignaturePad(canvasRef.current, {
       penColor: "blue",
       minWidth: 1,
       maxWidth: 2.5,
     });
-  }, []);
+
+    signaturePadRef.current = pad;
+
+    // Listen to drawing complete
+    (signaturePadRef.current as any).onEnd = () => {
+      setIsEmpty(signaturePadRef.current?.isEmpty() ?? true);
+    };
+
+    return () => {
+      signaturePadRef.current = null;
+    };
+  }, [signaturePadRef, canvasRef]);
 
   const clear = () => {
     signaturePadRef.current?.clear();
