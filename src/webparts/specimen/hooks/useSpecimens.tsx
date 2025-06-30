@@ -1,22 +1,30 @@
 // hooks/useSpecimens.ts
-import { useState, useEffect } from "react";
-import { spfi } from "@pnp/sp";
-import { SPFx } from "@pnp/sp";
-import "@pnp/sp/lists";
-import "@pnp/sp/items";
-import "@pnp/sp/site-users";
 import "@pnp/sp/files";
+import "@pnp/sp/folders";
 import "@pnp/sp/webs";
+import { useState, useEffect } from "react";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
+import { getSP } from "../../../shared/pnpjsConfig";
+// import { dataURLToBlob } from "../../../utils/helper";
 
 export const useSpecimens = (context: WebPartContext, type?: string) => {
   const baseUrl = "https://kpccoid.sharepoint.com";
-  const sp = spfi(`${baseUrl}/sites/esign`).using(SPFx(context));
+  const sp = getSP(context, `${baseUrl}/sites/esign`);
   const [items, setItems] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number | null>(null);
+
+  const getUserId = async (): Promise<void> => {
+    try {
+      const user = await sp.web.ensureUser(context.pageContext.user.email);
+      setUserId(user.Id);
+    } catch (err) {
+      console.error("❌ Gagal mendapatkan ID pengguna:", err);
+    }
+  };
 
   // GET all items
-  const getSpecimen = async () => {
+  const getSpecimen = async (): Promise<void> => {
     setLoading(true);
     try {
       const user = await sp.web.ensureUser(context.pageContext.user.email);
@@ -34,13 +42,14 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
   };
 
   // CREATE item
-  // const createItem = async (fields: any) => {
-  //   try {
-  //     await sp.web.lists.getByTitle(listName).items.add(fields);
-  //     await getItems();
-  //   } catch (err) {
-  //     console.error("❌ Gagal menambah item:", err);
-  //   }
+  // const uploadAndMoveFile = async (fields: string) => {
+  //   const fileName = `${userId}-${type}.png`;
+  //   const blob = dataURLToBlob(fields);
+  //   // const arrayBuffer = await blob.arrayBuffer();
+  //   const folder = await sp.web.getFolderByServerRelativePath(
+  //     "/sites/esign/specimen"
+  //   );
+  //   // const result = await folder.files.add(fileName, blob, true);
   // };
 
   // UPDATE item
@@ -54,8 +63,11 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
   // };
 
   useEffect(() => {
+    getUserId().catch((err) => {
+      console.error("❌ Gagal mendapatkan ID pengguna on mount:", err.message);
+    });
     getSpecimen().catch((err) => {
-      console.error("❌ Gagal fetch items on mount:", err);
+      console.error("❌ Gagal fetch items on mount:", err.message);
     });
   }, []);
 
@@ -63,6 +75,7 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
     items,
     loading,
     getSpecimen,
+    userId,
     // createItem,
     // updateItem,
   };

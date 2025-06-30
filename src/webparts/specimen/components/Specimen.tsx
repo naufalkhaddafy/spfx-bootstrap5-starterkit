@@ -77,10 +77,12 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
             )}
             <button
               type="button"
-              className="btn btn-primary me-2 my-2 btn-sm"
+              className={`btn btn-${
+                editInitial ? "danger" : "primary"
+              } me-2 my-2 btn-sm`}
               onClick={() => setEditInitial(!editInitial)}
             >
-              Update Initial
+              {editInitial ? "Cancel" : "Update Initial"}
             </button>
           </div>
           <div className="col-12 col-lg-6">
