@@ -8,25 +8,30 @@ import { escape } from "@microsoft/sp-lodash-subset";
 import { useSpecimens } from "../hooks/useSpecimens";
 import SignatureComponent from "./SignatureComponent";
 import { dataURLToBlob } from "../../../utils/helper";
+import { ColorLineRegular } from "@fluentui/react-icons";
 
 const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
   const {
     items: initialUrl,
     userId,
-    updateFile,
+    updateFile: updateFileInitial,
     loading: initialLoading,
   } = useSpecimens(context, "initial");
 
-  const { items: signatureUrl, loading: signatureLoading } = useSpecimens(
-    context,
-    "signature"
-  );
+  const {
+    items: signatureUrl,
+    updateFile: updateFileSignature,
+    loading: signatureLoading,
+  } = useSpecimens(context, "signature");
 
   const [editInitial, setEditInitial] = useState<boolean>(false);
   const [editSignature, setEditSignature] = useState<boolean>(false);
 
   const handleSave = (val: string, type: string) => {
-    updateFile(`${userId}-${type}.png`, dataURLToBlob(val))
+    (type === "initial" ? updateFileInitial : updateFileSignature)(
+      `${userId}-${type}.png`,
+      dataURLToBlob(val)
+    )
       .then(() => {
         if (type === "initial") {
           setEditInitial(false);
@@ -91,7 +96,7 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 className={`btn btn-primary me-2 my-2 btn-sm`}
                 onClick={() => setEditInitial(!editInitial)}
               >
-                Update Initial
+                <ColorLineRegular fontSize={16} /> Update Initial
               </button>
             )}
           </div>
@@ -138,7 +143,7 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 className="btn btn-primary me-2 my-2 btn-sm"
                 onClick={() => setEditSignature(!editSignature)}
               >
-                Update Signature
+                <ColorLineRegular fontSize={16} /> Update Signature
               </button>
             )}
           </div>

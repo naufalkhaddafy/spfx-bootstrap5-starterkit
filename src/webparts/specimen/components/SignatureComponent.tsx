@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useSignaturePad } from "../hooks/useSignaturePad";
+import { EraserRegular } from "@fluentui/react-icons";
 
 type SignatureComponentProps = {
   onBack: (val: boolean) => void;
@@ -10,11 +11,11 @@ const SignatureComponent: React.FC<SignatureComponentProps> = ({
   onSave,
 }) => {
   const { canvasRef, isEmpty, clear, getDataURL } = useSignaturePad();
-  const handleBack = () => onBack(false);
-  const handleSave = () => onSave(getDataURL());
+  const handleBack: () => void = () => onBack(false);
+  const handleSave: () => void = () => onSave(getDataURL());
   return (
     <div>
-      <div className="position-relative">
+      <div className="position-relative d-inline-block">
         <canvas
           ref={canvasRef}
           width={300}
@@ -23,9 +24,9 @@ const SignatureComponent: React.FC<SignatureComponentProps> = ({
         />
         <button
           onClick={clear}
-          className="position-absolute top-0 start-0 btn btn-sm"
+          className="position-absolute top-0 end-0 btn btn-sm"
         >
-          clear
+          <EraserRegular fontSize={20} color="red" />
         </button>
       </div>
       <div className="my-3" style={{ width: "300px" }}>
