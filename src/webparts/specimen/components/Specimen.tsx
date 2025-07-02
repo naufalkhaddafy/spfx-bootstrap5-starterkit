@@ -7,13 +7,15 @@ import type { ISpecimenProps } from "./ISpecimenProps";
 import { escape } from "@microsoft/sp-lodash-subset";
 import { useSpecimens } from "../hooks/useSpecimens";
 import SignatureComponent from "./SignatureComponent";
-// import { useSignaturePad } from "../hooks/useSignaturePad";
+import { dataURLToBlob } from "../../../utils/helper";
 
 const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
-  const { items: initialUrl, loading: initialLoading } = useSpecimens(
-    context,
-    "initial"
-  );
+  const {
+    items: initialUrl,
+    userId,
+    updateFile,
+    loading: initialLoading,
+  } = useSpecimens(context, "initial");
 
   const { items: signatureUrl, loading: signatureLoading } = useSpecimens(
     context,
@@ -23,14 +25,20 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
   const [editInitial, setEditInitial] = useState<boolean>(false);
   const [editSignature, setEditSignature] = useState<boolean>(false);
 
-  // const canvasSignature = React.useRef<HTMLCanvasElement>(null);
-  // // const canvasInitial = React.useRef<HTMLCanvasElement>(null);
-  // const {
-  //   canvasRef: canvasInitial,
-  //   isEmpty,
-  //   clear: clearInitial,
-  //   getDataURL,
-  // } = useSignaturePad();
+  const handleSave = (val: string, type: string) => {
+    updateFile(`${userId}-${type}.png`, dataURLToBlob(val))
+      .then(() => {
+        if (type === "initial") {
+          setEditInitial(false);
+        } else if (type === "signature") {
+          setEditSignature(false);
+        }
+      })
+      .catch((err) => {
+        console.error("❌ Gagal mengupdate file:", err);
+      });
+  };
+
   return (
     <section className="container mt-4">
       <div className="">
@@ -42,12 +50,12 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
         <div className="row my-5">
           <div className="col-12 col-lg-6">
             <h5>Initial Specimen</h5>
-            {/* <SignatureComponent canvasRef={canvasInitial} isEmpty={isEmpty} /> */}
-            {/* <button onClick={clearInitial}>Clear</button>
-            <button onClick={() => console.log(getDataURL())}>Save</button> */}
             {editInitial ? (
               <div id="initialPad" className="my-3">
-                <SignatureComponent />
+                <SignatureComponent
+                  onBack={(val) => setEditInitial(val)}
+                  onSave={(val) => handleSave(val, "initial")}
+                />
               </div>
             ) : (
               <div id="initialSpecimen" className="my-3">
@@ -75,21 +83,26 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 )}
               </div>
             )}
-            <button
-              type="button"
-              className={`btn btn-${
-                editInitial ? "danger" : "primary"
-              } me-2 my-2 btn-sm`}
-              onClick={() => setEditInitial(!editInitial)}
-            >
-              {editInitial ? "Cancel" : "Update Initial"}
-            </button>
+            {editInitial ? (
+              ""
+            ) : (
+              <button
+                type="button"
+                className={`btn btn-primary me-2 my-2 btn-sm`}
+                onClick={() => setEditInitial(!editInitial)}
+              >
+                Update Initial
+              </button>
+            )}
           </div>
           <div className="col-12 col-lg-6">
             <h5>Signature Specimen</h5>
             {editSignature ? (
               <div id="initialPad" className="my-3">
-                <SignatureComponent />
+                <SignatureComponent
+                  onBack={(val) => setEditSignature(val)}
+                  onSave={(val) => handleSave(val, "signature")}
+                />
               </div>
             ) : (
               <div id="signatureSpecimen" className="my-3">
@@ -117,13 +130,17 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 )}
               </div>
             )}
-            <button
-              type="button"
-              className="btn btn-primary me-2 my-2 btn-sm"
-              onClick={() => setEditSignature(!editSignature)}
-            >
-              Update Signature
-            </button>
+            {editSignature ? (
+              ""
+            ) : (
+              <button
+                type="button"
+                className="btn btn-primary me-2 my-2 btn-sm"
+                onClick={() => setEditSignature(!editSignature)}
+              >
+                Update Signature
+              </button>
+            )}
           </div>
         </div>
       </div>

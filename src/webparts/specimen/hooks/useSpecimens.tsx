@@ -1,15 +1,12 @@
 // hooks/useSpecimens.ts
-import "@pnp/sp/files";
-import "@pnp/sp/folders";
-import "@pnp/sp/webs";
 import { useState, useEffect } from "react";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { getSP } from "../../../shared/pnpjsConfig";
-// import { dataURLToBlob } from "../../../utils/helper";
+import { SPFI } from "@pnp/sp";
 
 export const useSpecimens = (context: WebPartContext, type?: string) => {
   const baseUrl = "https://kpccoid.sharepoint.com";
-  const sp = getSP(context, `${baseUrl}/sites/esign`);
+  const sp: SPFI = getSP(context, `${baseUrl}/sites/esign`);
   const [items, setItems] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [userId, setUserId] = useState<number | null>(null);
@@ -23,7 +20,6 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
     }
   };
 
-  // GET all items
   const getSpecimen = async (): Promise<void> => {
     setLoading(true);
     try {
@@ -33,7 +29,8 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
           `/sites/esign/Specimen/${user.Id}-${type}.png`
         )
         .select("ServerRelativeUrl")();
-      setItems(`${baseUrl}${file.ServerRelativeUrl}`);
+      const noCacheUrl = `${baseUrl}${file.ServerRelativeUrl}?ts=${Date.now()}`;
+      setItems(noCacheUrl);
     } catch (err) {
       console.error("❌ Gagal fetch items:", err);
     } finally {
@@ -41,26 +38,29 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
     }
   };
 
-  // CREATE item
-  // const uploadAndMoveFile = async (fields: string) => {
-  //   const fileName = `${userId}-${type}.png`;
-  //   const blob = dataURLToBlob(fields);
-  //   // const arrayBuffer = await blob.arrayBuffer();
-  //   const folder = await sp.web.getFolderByServerRelativePath(
-  //     "/sites/esign/specimen"
-  //   );
-  //   // const result = await folder.files.add(fileName, blob, true);
-  // };
+  async function updateFile(
+    fileName: string,
+    content: Blob,
+    metadata?: { [key: string]: string }
+  ): Promise<void> {
+    try {
+      const upload = await sp.web
+        .getFolderByServerRelativePath("Specimen")
+        .files.addUsingPath(fileName, content, { Overwrite: true });
 
-  // UPDATE item
-  // const updateItem = async (id: number, fields: any) => {
-  //   try {
-  //     await sp.web.lists.getByTitle(listName).items.getById(id).update(fields);
-  //     await getItems();
-  //   } catch (err) {
-  //     console.error("❌ Gagal update item:", err);
-  //   }
-  // };
+      await console.log(`✅ Upload berhasil: ${upload}`);
+      // Optional: Update metadata kalau ada
+      // if (metadata) {
+      //   const listItem = await upload.file.getItem();
+      //   await listItem.update(metadata);
+      // }
+
+      // ⬇️ Panggil fetch ulang file setelah update berhasil
+      await getSpecimen();
+    } catch (err) {
+      console.error("❌ Gagal upload atau update metadata:", err);
+    }
+  }
 
   useEffect(() => {
     getUserId().catch((err) => {
@@ -76,7 +76,6 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
     loading,
     getSpecimen,
     userId,
-    // createItem,
-    // updateItem,
+    updateFile,
   };
 };

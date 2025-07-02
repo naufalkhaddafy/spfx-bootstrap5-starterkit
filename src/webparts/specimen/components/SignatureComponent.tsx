@@ -1,17 +1,33 @@
 import * as React from "react";
 import { useSignaturePad } from "../hooks/useSignaturePad";
 
-const SignatureComponent: React.FC = () => {
+type SignatureComponentProps = {
+  onBack: (val: boolean) => void;
+  onSave: (val: string) => void;
+};
+const SignatureComponent: React.FC<SignatureComponentProps> = ({
+  onBack,
+  onSave,
+}) => {
   const { canvasRef, isEmpty, clear, getDataURL } = useSignaturePad();
-  console.log("empty :", isEmpty);
+  const handleBack = () => onBack(false);
+  const handleSave = () => onSave(getDataURL());
   return (
     <div>
-      <canvas
-        ref={canvasRef}
-        width={300}
-        height={200}
-        className={`border rounded border-${isEmpty ? "danger" : "success"}`}
-      />
+      <div className="position-relative">
+        <canvas
+          ref={canvasRef}
+          width={300}
+          height={200}
+          className={`border rounded border-${isEmpty ? "danger" : "success"}`}
+        />
+        <button
+          onClick={clear}
+          className="position-absolute top-0 start-0 btn btn-sm"
+        >
+          clear
+        </button>
+      </div>
       <div className="my-3" style={{ width: "300px" }}>
         <select
           className="form-select-sm my-2 w-100"
@@ -24,13 +40,10 @@ const SignatureComponent: React.FC = () => {
         </select>
 
         <div className="d-flex my-3" style={{ gap: "5px" }}>
-          <button className="btn btn-sm btn-secondary w-100" onClick={clear}>
-            Clear
+          <button className="btn btn-sm btn-danger w-100" onClick={handleBack}>
+            Cancel
           </button>
-          <button
-            className="btn btn-sm btn-primary w-100"
-            onClick={() => console.log(getDataURL())}
-          >
+          <button className="btn btn-sm btn-primary w-100" onClick={handleSave}>
             Save
           </button>
         </div>

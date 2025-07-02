@@ -33,8 +33,8 @@ export const useSignaturePad = () => {
     setIsEmpty(true);
   };
 
-  const getDataURL = (): string | null => {
-    return signaturePadRef.current?.toDataURL("image/png") ?? null;
+  const getDataURL = (): string => {
+    return signaturePadRef.current?.toDataURL("image/png") ?? "";
   };
 
   const loadFromDataURL = (url: string) => {
