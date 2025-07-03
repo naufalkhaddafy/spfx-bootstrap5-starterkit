@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import type { ISpecimenProps } from "./ISpecimenProps";
-import { escape } from "@microsoft/sp-lodash-subset";
 import { useSpecimens } from "../hooks/useSpecimens";
 import SignatureComponent from "./SignatureComponent";
 import { dataURLToBlob } from "../../../utils/helper";
@@ -26,11 +25,12 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
 
   const [editInitial, setEditInitial] = useState<boolean>(false);
   const [editSignature, setEditSignature] = useState<boolean>(false);
-
+  const [division, setDivision] = useState<string>("");
   const handleSave = (val: string, type: string) => {
     (type === "initial" ? updateFileInitial : updateFileSignature)(
       `${userId}-${type}.png`,
-      dataURLToBlob(val)
+      dataURLToBlob(val),
+      division
     )
       .then(() => {
         if (type === "initial") {
@@ -43,11 +43,10 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
         console.error("❌ Gagal mengupdate file:", err);
       });
   };
-
   return (
     <section className="container mt-4">
       <div className="">
-        <h5 className="">Hello, {escape(userDisplayName)}!</h5>
+        <h5 className="">Hello, {userDisplayName}!</h5>
         <p className="">
           This is your signature in <strong>eSign application</strong>.
         </p>
@@ -60,6 +59,8 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 <SignatureComponent
                   onBack={(val) => setEditInitial(val)}
                   onSave={(val) => handleSave(val, "initial")}
+                  onSelectChange={(value) => setDivision(value)}
+                  loading={initialLoading}
                 />
               </div>
             ) : (
@@ -107,6 +108,8 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
                 <SignatureComponent
                   onBack={(val) => setEditSignature(val)}
                   onSave={(val) => handleSave(val, "signature")}
+                  onSelectChange={(value) => setDivision(value)}
+                  loading={signatureLoading}
                 />
               </div>
             ) : (

@@ -42,30 +42,33 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
   async function updateFile(
     fileName: string,
     content: Blob,
-    metadata?: { [key: string]: string }
+    division: string
   ): Promise<void> {
+    setLoading(true);
     try {
       await sp.web
         .getFolderByServerRelativePath("Specimen")
         .files.addUsingPath(fileName, content, { Overwrite: true });
-      const relativePath = `/Specimen/${fileName}`;
+
+      await new Promise<void>((resolve) => setTimeout(resolve, 500));
+
+      const relativePath = `/sites/esign/Specimen/${fileName}`;
       const item = await sp.web
         .getFileByServerRelativePath(relativePath)
         .getItem();
 
-      console.log(`✅ Mendapatkan item: ${item}`);
-      // await item.update({
-      //   SpecimenType: "Signature",
-      //   SpecimenOwner: `${context.pageContext.user.email}`,
-      //   Division: "IT",
-      //   Format: "Formatted",
-      //   Note: "Upload dari sistem otomatis",
-      // });
-
+      await item.update({
+        Specimen_x0020_Type: type === "initial" ? "Initial" : "Signature",
+        Specimen_x0020_OwnerId: userId,
+        Division1: division,
+        Format: "Formatted",
+      });
       const blobUrl = URL.createObjectURL(content);
       setItems(blobUrl);
     } catch (err) {
       console.error("❌ Gagal upload atau update metadata:", err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -76,7 +79,6 @@ export const useSpecimens = (context: WebPartContext, type?: string) => {
     getSpecimen().catch((err) => {
       console.error("❌ Gagal fetch items on mount:", err.message);
     });
-    console.log(sp.web.toUrl());
   }, []);
 
   return {

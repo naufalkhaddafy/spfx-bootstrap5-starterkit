@@ -5,10 +5,14 @@ import { EraserRegular } from "@fluentui/react-icons";
 type SignatureComponentProps = {
   onBack: (val: boolean) => void;
   onSave: (val: string) => void;
+  onSelectChange: (value: string) => void;
+  loading: boolean;
 };
 const SignatureComponent: React.FC<SignatureComponentProps> = ({
   onBack,
   onSave,
+  onSelectChange,
+  loading,
 }) => {
   const { canvasRef, isEmpty, clear, getDataURL } = useSignaturePad();
   const handleBack: () => void = () => onBack(false);
@@ -33,18 +37,29 @@ const SignatureComponent: React.FC<SignatureComponentProps> = ({
         <select
           className="form-select-sm my-2 w-100"
           aria-label="Default select example"
+          onChange={(e) => onSelectChange(e.target.value)}
         >
-          <option selected>Select Division</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+          <option value="">Select Division</option>
+          <option value="IT">IT</option>
+          <option value="HSES">HSES</option>
+          <option value="ESD">ESD</option>
         </select>
 
         <div className="d-flex my-3" style={{ gap: "5px" }}>
           <button className="btn btn-sm btn-danger w-100" onClick={handleBack}>
             Cancel
           </button>
-          <button className="btn btn-sm btn-primary w-100" onClick={handleSave}>
+          <button
+            className="btn btn-sm btn-primary w-100 d-flex justify-content-center align-items-center"
+            onClick={handleSave}
+            disabled={loading}
+            style={{ gap: "5px" }}
+          >
+            {loading && (
+              <div className="spinner-border spinner-border-sm" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            )}
             Save
           </button>
         </div>
