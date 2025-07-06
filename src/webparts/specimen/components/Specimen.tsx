@@ -25,8 +25,13 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
 
   const [editInitial, setEditInitial] = useState<boolean>(false);
   const [editSignature, setEditSignature] = useState<boolean>(false);
-  const [division, setDivision] = useState<string>("");
+  const [division, setDivision] = useState<string | null>(null);
   const handleSave = (val: string, type: string) => {
+    if (!val || !division) {
+      alert("❌ Lengkapi data sebelum menyimpan!");
+      return;
+    }
+
     (type === "initial" ? updateFileInitial : updateFileSignature)(
       `${userId}-${type}.png`,
       dataURLToBlob(val),
@@ -95,7 +100,10 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
               <button
                 type="button"
                 className={`btn btn-primary me-2 my-2 btn-sm`}
-                onClick={() => setEditInitial(!editInitial)}
+                onClick={() => {
+                  setEditInitial(!editInitial);
+                  setDivision(null);
+                }}
               >
                 <ColorLineRegular fontSize={16} /> Update Initial
               </button>
@@ -144,7 +152,10 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
               <button
                 type="button"
                 className="btn btn-primary me-2 my-2 btn-sm"
-                onClick={() => setEditSignature(!editSignature)}
+                onClick={() => {
+                  setEditSignature(!editSignature);
+                  setDivision(null);
+                }}
               >
                 <ColorLineRegular fontSize={16} /> Update Signature
               </button>

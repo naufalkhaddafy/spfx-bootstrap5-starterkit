@@ -1,6 +1,7 @@
 import * as React from "react";
-import { useSignaturePad } from "../hooks/useSignaturePad";
+import { useRef, useState, useEffect } from "react";
 import { EraserRegular } from "@fluentui/react-icons";
+import SignaturePad from "signature_pad";
 
 type SignatureComponentProps = {
   onBack: (val: boolean) => void;
@@ -14,9 +15,39 @@ const SignatureComponent: React.FC<SignatureComponentProps> = ({
   onSelectChange,
   loading,
 }) => {
-  const { canvasRef, isEmpty, clear, getDataURL } = useSignaturePad();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const signaturePadRef = useRef<SignaturePad | null>(null);
+  const [isEmpty, setIsEmpty] = useState(true);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const pad = new SignaturePad(canvasRef.current, {
+      penColor: "blue",
+      minWidth: 1,
+      maxWidth: 2.5,
+    });
+
+    signaturePadRef.current = pad;
+  }, [signaturePadRef, canvasRef]);
+
+  const clear = () => {
+    signaturePadRef.current?.clear();
+    setIsEmpty(true);
+  };
+
+  const getDataURL = (): string => {
+    return signaturePadRef.current?.toDataURL("image/png") ?? "";
+  };
+
   const handleBack: () => void = () => onBack(false);
-  const handleSave: () => void = () => onSave(getDataURL());
+  const handleSave: () => void = () => {
+    if (signaturePadRef.current?.isEmpty()) {
+      alert("❌ Lengkapi data sebelum menyimpan!");
+      return;
+    }
+    onSave(getDataURL());
+  };
   return (
     <div>
       <div className="position-relative d-inline-block">

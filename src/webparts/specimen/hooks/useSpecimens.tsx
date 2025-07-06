@@ -1,12 +1,17 @@
 // hooks/useSpecimens.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { getSP } from "../../../shared/pnpjsConfig";
 import { SPFI } from "@pnp/sp";
 
 export const useSpecimens = (context: WebPartContext, type?: string) => {
   const baseUrl = "https://kpccoid.sharepoint.com";
-  const sp: SPFI = getSP(context, `${baseUrl}/sites/esign`);
+  // const sp: SPFI = getSP(context, `${baseUrl}/sites/esign`);
+  const sp: SPFI = useMemo(
+    () => getSP(context, `${baseUrl}/sites/esign`),
+    [context]
+  );
+
   const [items, setItems] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [userId, setUserId] = useState<number | null>(null);
