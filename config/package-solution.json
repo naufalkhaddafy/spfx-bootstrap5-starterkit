@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "e-sign-project-node-20-client-side-solution",
+    "name": "e-sign-collect-specimen-client-side-solution",
     "id": "155ba180-9bd9-4377-9fc3-00cd7e41c480",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "e-sign-project-node-20 description"
+        "default": "e-sign-collect-specimen description"
       },
       "longDescription": {
-        "default": "e-sign-project-node-20 description"
+        "default": "e-sign-collect-specimen description"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -27,7 +27,7 @@
     },
     "features": [
       {
-        "title": "e-sign-project-node-20 Feature",
+        "title": "e-sign-collect-specimen Feature",
         "description": "The feature that activates elements of the e-sign-project-node-20 solution.",
         "id": "fc57b932-3bdf-4c0d-b0e9-7bde7117ebd0",
         "version": "1.0.0.0"
@@ -35,6 +35,6 @@
     ]
   },
   "paths": {
-    "zippedPackage": "solution/e-sign-project-node-20.sppkg"
+    "zippedPackage": "solution/e-sign-collect-specimen.sppkg"
   }
 }

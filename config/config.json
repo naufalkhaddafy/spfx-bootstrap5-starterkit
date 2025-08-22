@@ -9,19 +9,10 @@
           "manifest": "./src/webparts/specimen/SpecimenWebPart.manifest.json"
         }
       ]
-    },
-    "initiate-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/initiate/InitiateWebPart.js",
-          "manifest": "./src/webparts/initiate/InitiateWebPart.manifest.json"
-        }
-      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "SpecimenWebPartStrings": "lib/webparts/specimen/loc/{locale}.js",
-    "InitiateWebPartStrings": "lib/webparts/initiate/loc/{locale}.js"
+    "SpecimenWebPartStrings": "lib/webparts/specimen/loc/{locale}.js"
   }
 }

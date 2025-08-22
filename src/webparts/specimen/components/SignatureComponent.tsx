@@ -2,6 +2,7 @@ import * as React from "react";
 import { useRef, useState, useEffect } from "react";
 import { EraserRegular } from "@fluentui/react-icons";
 import SignaturePad from "signature_pad";
+import { Division } from "../../../shared/division";
 
 type SignatureComponentProps = {
   onBack: (val: boolean) => void;
@@ -31,7 +32,7 @@ const SignatureComponent: React.FC<SignatureComponentProps> = ({
     signaturePadRef.current = pad;
   }, [signaturePadRef, canvasRef]);
 
-  const clear = () => {
+  const clear = (): void => {
     signaturePadRef.current?.clear();
     setIsEmpty(true);
   };
@@ -71,9 +72,12 @@ const SignatureComponent: React.FC<SignatureComponentProps> = ({
           onChange={(e) => onSelectChange(e.target.value)}
         >
           <option value="">Select Division</option>
-          <option value="IT">IT</option>
-          <option value="HSES">HSES</option>
-          <option value="ESD">ESD</option>
+          {Object.entries(Division).map(([key, value]) => (
+            <option key={key} value={value}>
+              {value}
+            </option>
+          ))}
+          <option value="Other">Other</option>
         </select>
 
         <div className="d-flex my-3" style={{ gap: "5px" }}>

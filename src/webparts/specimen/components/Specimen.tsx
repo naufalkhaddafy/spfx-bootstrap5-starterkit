@@ -56,8 +56,8 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
           This is your signature in <strong>eSign application</strong>.
         </p>
 
-        <div className="row my-5">
-          <div className="col-12 col-lg-6">
+        <div className="d-flex my-5 flex-wrap" style={{ gap: "50px" }}>
+          <div className="" style={{ minWidth: "300px" }}>
             <h5>Initial Specimen</h5>
             {editInitial ? (
               <div id="initialPad" className="my-3">
@@ -109,7 +109,7 @@ const Specimen: React.FC<ISpecimenProps> = ({ userDisplayName, context }) => {
               </button>
             )}
           </div>
-          <div className="col-12 col-lg-6">
+          <div className="" style={{ minWidth: "300px" }}>
             <h5>Signature Specimen</h5>
             {editSignature ? (
               <div id="initialPad" className="my-3">
